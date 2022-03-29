@@ -1,7 +1,8 @@
 # DRAGN-Server
 Code for the server to be run in the BYU DRAGN Lab
 
-server.py - a default echo server as a base to work upon.
+server.py - working HTTP server with basic pathing
+client.py - working code on how to do a POST request to the server
 
 For sending objects over Socket: https://stackoverflow.com/questions/47391774/python-send-and-receive-objects-through-sockets
 
