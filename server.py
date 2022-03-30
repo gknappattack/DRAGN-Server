@@ -1,9 +1,10 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import parse_qs
 import json
-from chatbots.Echo import Echo
-from datetime import datetime
 import socket
+from datetime import datetime
+from chatbots.Echo import Echo
+from urllib.parse import parse_qs
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
 
 chatbots = ["ECHO"]
 echo = Echo()

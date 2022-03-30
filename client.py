@@ -1,6 +1,5 @@
 import requests
 import json
-import http, subprocess
 
 url = 'http://localhost:8088/chatbot/echo'
 myobj = {'somekey':'somevalue'}
