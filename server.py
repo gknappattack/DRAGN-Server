@@ -16,48 +16,39 @@ class GP(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
+    def send_json(self, chatbot, json_input):
+        chatbot.recv_message(json_input)
+        data = chatbot.send_message() 
+        data_json = json.dumps(data)
+        self._set_headers()
+        self.wfile.write(bytes(data_json, "utf-8"))
+    def send_json_message(self, json_input):
+        data_json = json.dumps(json_input)
+        self._set_headers()
+        self.wfile.write(bytes(data_json, "utf-8"))
     def do_HEAD(self):
         self._set_headers()
     def do_GET(self):
         self._set_headers()
-        #print(self.path)
-        #print(parse_qs(self.path[2:]))
-        #self.wfile.write("<html><body><h1>Get Request Received!</h1></body></html>")
     def do_POST(self):
-        #self._set_headers
         if self.path == "/":
             self._set_headers()
             root_text = "Currently no implementation at the base level.. \n Please try: /chatbot/<chatbotID or chatbotNAME>"
             data = {"text":root_text}
-            data_json = json.dumps(data)
-            self.wfile.write(bytes(data_json, "utf-8"))
+            self.send_json_message(data)
         elif self.path == "/chatbot" or self.path == "/chatbot/":
             data = {"text":"current list of chatbots", "chatbots":chatbots}
-            data_json = json.dumps(data)
-            self._set_headers()
-            self.wfile.write(bytes(data_json, "utf-8"))
+            self.send_json_message(data)
         elif self.path == "/chatbot/echo":
             print("Echo sent a message @: ", str(datetime.now()))
-            #data = {"text":"we are at ECHO"}
             req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-            echo.recv_message(req_json)
-            #print(req_json)
-            data = echo.send_message()
-            data_json = json.dumps(data)
-            self._set_headers()
-            self.wfile.write(bytes(data_json, "utf-8"))
+            self.send_json(echo, req_json)
         elif self.path == "/chatbot/trevor":
             print("Trevor sent a message @: ", str(datetime.now()))
             req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-            trevor.recv_message(req_json)
-
-            data = trevor.send_message()
-            data_json = json.dumps(data)
-            self._set_headers()
-            self.wfile.write(bytes(data_json, "utf-8"))
-            
+            self.send_json(trevor, req_json)     
         
-
+# WYRMLING DEFAULT: 127.0.1.1:8088
 
 def run(server_class=HTTPServer, handler_class=GP, port=8088):
     server_address = (socket.gethostbyname(socket.gethostname()), port)
