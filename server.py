@@ -2,12 +2,14 @@ import json
 import socket
 from datetime import datetime
 from chatbots.Echo import Echo
+from chatbots.Trevor import Trevor
 from urllib.parse import parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-chatbots = ["ECHO"]
+chatbots = ["ECHO", "TREVOR"]
 echo = Echo()
+trevor = Trevor()
 
 class GP(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -37,7 +39,6 @@ class GP(BaseHTTPRequestHandler):
         elif self.path == "/chatbot/echo":
             print("Echo sent a message @: ", str(datetime.now()))
             #data = {"text":"we are at ECHO"}
-            
             req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             echo.recv_message(req_json)
             #print(req_json)
@@ -45,6 +46,16 @@ class GP(BaseHTTPRequestHandler):
             data_json = json.dumps(data)
             self._set_headers()
             self.wfile.write(bytes(data_json, "utf-8"))
+        elif self.path == "/chatbot/trevor":
+            print("Trevor sent a message @: ", str(datetime.now()))
+            req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            trevor.recv_message(req_json)
+
+            data = trevor.send_message()
+            data_json = json.dumps(data)
+            self._set_headers()
+            self.wfile.write(bytes(data_json, "utf-8"))
+            
         
 
 
