@@ -8,8 +8,6 @@ from chatbots.Abbi import Abbi
 from urllib.parse import parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# Abbi: adding a line
-
 
 chatbots = ["ECHO", "TREVOR", "KEVIN", "ABBI"]
 echo = Echo()
@@ -58,6 +56,7 @@ class GP(BaseHTTPRequestHandler):
             req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             self.send_json(kevin, req_json) 
         elif self.path == "/chatbot/abbi":
+            print("Abbi sent a message @: ", str(datetime.now()))
             req_json = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             self.send_json(abbi, req_json) 
 
